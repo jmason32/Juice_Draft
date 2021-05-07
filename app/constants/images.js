@@ -63,9 +63,17 @@
 
 const lemonade = require("../assets/lemon.jpg");
 const sorrel = require("../assets/sorrel.jpg");
+const soursop = require("../assets/soursop.png")
+const one = require('../assets/1.jpg')
+const two = require('../assets/2.jpg')
+const three = require('../assets/3.jpg')
 
 export default {
-    lemonade,
-    sorrel
+    "lemonade" : lemonade,
+    "sorrel" : sorrel,
+    "soursop" : soursop,
+    "one" : one,
+    "two" : two,
+    "three" : three
 }
 

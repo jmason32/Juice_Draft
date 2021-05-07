@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     SafeAreaView,
     View,
@@ -6,7 +6,8 @@ import {
     StyleSheet,
     TouchableOpacity,
     Image,
-    FlatList
+    FlatList,
+    ImageStore
 } from "react-native";
 
 import { icons, images, SIZES, COLORS, FONTS } from '../constants'
@@ -14,42 +15,41 @@ import { icons, images, SIZES, COLORS, FONTS } from '../constants'
 const Home = ({ navigation }) => {
 
     // Dummy Datas
-
     const initialCurrentLocation = {
-        streetName: "Yo Crib",
+        streetName: "Ruby's Real Juice",
         gps: {
             latitude: 1.5496614931250685,
             longitude: 110.36381866919922
         }
     }
 
-    // price rating
-    const affordable = 1
-    const fairPrice = 2
-    const expensive = 3
-
-    const juiceData = [
-        {
-            id: 1,
-            name: "Ginger Lemonade",
-            rating: 4.8,
-            priceRating: affordable,
-            photo: images.lemonade,
-            duration: "16oz $7",
-        },
-        {
-            id: 2,
-            name: "Sorrel",
-            rating: 4.8,
-            priceRating: affordable,
-            photo: images.sorrel,
-            duration: "16oz $7",
-        },
-    ]
-
-
-    const [juices, setJuices] = React.useState(juiceData)
+    const [juices, setJuices] = React.useState('')
     const [currentLocation, setCurrentLocation] = React.useState(initialCurrentLocation)
+
+    const fetchJuices = async () => {
+        fetch("https://parseapi.back4app.com/classes/Juice", {
+        "method": "GET",
+        "headers": {
+            "X-Parse-Application-Id": "s7lWyMcG1FCEWjBWxEVa9Dty0aND7ZapvV8s0drp",
+            "X-Parse-Master-Key": "Y7JcMzzn10aeSmtAtNurWVQ97c1r8cq3DwFwAvx2",
+            "X-Parse-Session-Token": "r:92aa1de075bef26588d16dff644c637b"
+        }
+        })
+        .then(response => response.json())
+        .then(response => {
+            return(response['results'])
+        })
+        .then(response => {
+            setJuices(response)
+        })
+        .catch(err => {
+            console.log(err);
+        });
+    }
+
+    useEffect(() => {
+        fetchJuices()
+    }, [])
 
     function renderHeader() {
         return (
@@ -108,7 +108,7 @@ const Home = ({ navigation }) => {
         const renderItem = ({ item }) => (
             <TouchableOpacity
                 style={{ marginBottom: SIZES.padding * 2 }}
-                onPress={() => navigation.navigate("Restaurant", {
+                onPress={() => navigation.navigate("Juice", {
                     item,
                     currentLocation
                 })}
@@ -120,7 +120,7 @@ const Home = ({ navigation }) => {
                     }}
                 >
                     <Image
-                        source={item.photo}
+                        source= {images[item.photo]}
                         resizeMode="cover"
                         style={{
                             width: "100%",
@@ -143,7 +143,7 @@ const Home = ({ navigation }) => {
                             ...styles.shadow
                         }}
                     >
-                        <Text style={{ ...FONTS.h4 }}>{item.duration}</Text>
+                        <Text style={{ ...FONTS.h4 }}>{'$'+item.price}</Text>
                     </View>
                 </View>
 
@@ -174,7 +174,7 @@ const Home = ({ navigation }) => {
         return (
             <FlatList
                 data={juices}
-                keyExtractor={item => `${item.id}`}
+                keyExtractor={item => `${item.objectId}`}
                 renderItem={renderItem}
                 contentContainerStyle={{
                     paddingHorizontal: SIZES.padding * 2,
@@ -184,6 +184,7 @@ const Home = ({ navigation }) => {
         )
     }
 
+    
     return (
         <SafeAreaView style={styles.container}>
             {renderHeader()}
