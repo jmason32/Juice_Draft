@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React, { useEffect } from "react";
 import {
     SafeAreaView,
     View,
@@ -28,23 +28,24 @@ const Home = ({ navigation }) => {
 
     const fetchJuices = async () => {
         fetch("https://parseapi.back4app.com/classes/Juice", {
-        "method": "GET",
-        "headers": {
-            "X-Parse-Application-Id": "s7lWyMcG1FCEWjBWxEVa9Dty0aND7ZapvV8s0drp",
-            "X-Parse-Master-Key": "Y7JcMzzn10aeSmtAtNurWVQ97c1r8cq3DwFwAvx2",
-            "X-Parse-Session-Token": "r:92aa1de075bef26588d16dff644c637b"
-        }
+            "method": "GET",
+            "headers": {
+                "X-Parse-Application-Id": "s7lWyMcG1FCEWjBWxEVa9Dty0aND7ZapvV8s0drp",
+                "X-Parse-Master-Key": "Y7JcMzzn10aeSmtAtNurWVQ97c1r8cq3DwFwAvx2",
+                "X-Parse-Session-Token": "r:92aa1de075bef26588d16dff644c637b"
+            }
         })
-        .then(response => response.json())
-        .then(response => {
-            return(response['results'])
-        })
-        .then(response => {
-            setJuices(response)
-        })
-        .catch(err => {
-            console.log(err);
-        });
+            .then(response => response.json())
+            .then(response => {
+                return (response['results'])
+            })
+            .then(response => {
+                setJuices(response)
+                console.log(response)
+            })
+            .catch(err => {
+                console.log(err);
+            });
     }
 
     useEffect(() => {
@@ -120,7 +121,7 @@ const Home = ({ navigation }) => {
                     }}
                 >
                     <Image
-                        source= {images[item.photo]}
+                        source={images[item.photo]}
                         resizeMode="cover"
                         style={{
                             width: "100%",
@@ -143,7 +144,7 @@ const Home = ({ navigation }) => {
                             ...styles.shadow
                         }}
                     >
-                        <Text style={{ ...FONTS.h4 }}>{'$'+item.price}</Text>
+                        <Text style={{ ...FONTS.h4 }}>{'$' + item.price}</Text>
                     </View>
                 </View>
 
@@ -184,7 +185,7 @@ const Home = ({ navigation }) => {
         )
     }
 
-    
+
     return (
         <SafeAreaView style={styles.container}>
             {renderHeader()}
@@ -196,7 +197,7 @@ const Home = ({ navigation }) => {
 
 const stylesHeader = StyleSheet.create({
     headerS: {
-        flexDirection: 'row', 
+        flexDirection: 'row',
         height: 50
     },
     iconStyle: {
@@ -208,7 +209,7 @@ const stylesHeader = StyleSheet.create({
 })
 
 const styles = StyleSheet.create({
-    
+
     container: {
         flex: 1,
         backgroundColor: COLORS.lightGray4
